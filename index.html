@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ATS-Friendly AI Resume Generator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #03edfd;
+      color: rgb(56, 55, 55);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      padding: 20px;
+      gap: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .form-section, .resume-section {
+      flex: 1;
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8cap 10px rgba(3, 252, 189, 0.952);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      color: #555;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .resume-output {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      font-size: 16px;
+      line-height: 1.5;
+      white-space: pre-line;
+      font-family: Arial, sans-serif;
+    }
+
+    .stats {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .keywords {
+      margin: 5px 0;
+      font-size: 13px;
+      color: green;
+    }
+
+    .score-box {
+      background: #e0f2fe;
+      padding: 10px;
+      border-left: 5px solid #0ea5e9;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .ats-note {
+      font-size: 13px;
+      color: #666;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ATS-Friendly AI Resume Generator</h1>
+    <p>Real-Time Feedback • Keyword Optimization • Clean Format</p>
+  </header>
+
+  <div class="container">
+    <div class="form-section">
+      <h2>Resume Details</h2>
+
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" placeholder="John Doe"/>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="john@example.com"/>
+
+      <label for="phone">Phone Number:</label>
+      <input type="text" id="phone" placeholder="+91-9876543210"/>
+
+      <label for="summary">Professional Summary:</label>
+      <textarea id="summary" rows="4" placeholder="A dedicated software engineer..."></textarea>
+      <div class="stats">
+        Word Count: <span id="wordCount">0</span> |
+        Keywords: <span class="keywords" id="keywordCount">0</span>
+      </div>
+
+      <label for="skills">Skills (comma separated):</label>
+      <input type="text" id="skills" placeholder="JavaScript, Python, HTML"/>
+
+      <label for="experience">Professional Experience:</label>
+      <textarea id="experience" rows="4" placeholder="Worked at XYZ Corp for 3 years..."></textarea>
+
+      <label for="education">Education:</label>
+      <textarea id="education" rows="3" placeholder="B.Tech in Computer Science - ABC University"></textarea>
+
+      <div class="score-box">
+        Resume Feedback Score: <strong><span id="resumeScore">0</span>/100</strong>
+      </div>
+
+      <button onclick="generateResume()">Generate ATS Resume</button>
+      <div class="ats-note">* ATS-friendly format uses standard section titles and avoids graphics/tables.</div>
+    </div>
+
+    <div class="resume-section">
+      <h2>Generated Resume</h2>
+      <div class="resume-output" id="resumeOutput">
+        <!-- Resume content appears here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const summaryInput = document.getElementById('summary');
+    const wordCountDisplay = document.getElementById('wordCount');
+    const keywordCountDisplay = document.getElementById('keywordCount');
+    const resumeScoreDisplay = document.getElementById('resumeScore');
+
+    const importantKeywords = [
+      'teamwork', 'python', 'javascript', 'leadership',
+      'sql', 'communication', 'project management',
+      'problem-solving', 'agile', 'debugging', 'cloud'
+    ];
+
+    summaryInput.addEventListener('input', updateLiveStats);
+
+    function updateLiveStats() {
+      const text = summaryInput.value;
+      const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+      const wordCount = words.length;
+
+      let foundKeywords = importantKeywords.filter(kw =>
+        text.toLowerCase().includes(kw.toLowerCase())
+      );
+
+      wordCountDisplay.textContent = wordCount;
+      keywordCountDisplay.textContent = foundKeywords.length;
+
+      const score = Math.min(100, wordCount * 2 + foundKeywords.length * 5);
+      resumeScoreDisplay.textContent = score;
+    }
+
+    function generateResume() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const summary = document.getElementById('summary').value;
+      const skills = document.getElementById('skills').value;
+      const experience = document.getElementById('experience').value;
+      const education = document.getElementById('education').value;
+
+      const resume = `
+${name}
+Email: ${email}
+Phone: ${phone}
+
+Professional Summary:
+${summary}
+
+Skills:
+${skills}
+
+Professional Experience:
+${experience}
+
+Education:
+${education}
+      `;
+
+      document.getElementById('resumeOutput').innerText = resume;
+    }
+  </script>
+
+</body>
+</html>
